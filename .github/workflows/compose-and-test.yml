@@ -58,7 +58,7 @@ jobs:
                     --dbname=${{ env.WP_DB_NAME }} \
                     --dbuser=${{ env.WP_DB_USER }} \
                     --dbpass=${{ env.WP_DB_PASS }} \
-                    --dbhost=127.0.0.1 \
+                    --dbhost=127.0.0.1:${{env.WP_DB_PORT}} \
                     --dbprefix=wp_ \
                     --extra-php <<PHP
                   define( 'WP_DEBUG', true );
