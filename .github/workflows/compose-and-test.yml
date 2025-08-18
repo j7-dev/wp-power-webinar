@@ -4,8 +4,10 @@ env:
     PLUGIN_NAME: "power-webinar"
     REPO_URL: "https://github.com/j7-dev/wp-power-webinar.git"
     PHP_VERSION: "8.1"
-    MYSQL_DATABASE: wordpress_test
-    MYSQL_ROOT_PASSWORD: root
+    WP_DB_NAME: test
+    WP_DB_USER: root
+    WP_DB_PASS: root
+    WP_DB_PORT: 10083
 
 on:
     push:
@@ -21,10 +23,10 @@ jobs:
             mysql:
                 image: mysql:8.0
                 env:
-                    MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
-                    MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
+                    MYSQL_ROOT_PASSWORD: ${{ env.WP_DB_PASS }}
+                    MYSQL_DATABASE: ${{ env.WP_DB_NAME }}
                 ports:
-                    - 3306:3306
+                    - ${{env.WP_DB_PORT}}:3306
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
         steps:
@@ -40,7 +42,7 @@ jobs:
 
             - name: 等待 MySQL 準備就緒
               run: |
-                  until mysqladmin ping -h 127.0.0.1 -P 3306 --silent; do
+                  until mysqladmin ping -h 127.0.0.1 -P ${{env.WP_DB_PORT}} --silent; do
                     echo '等待 MySQL 啟動...'
                     sleep 2
                   done
@@ -53,9 +55,9 @@ jobs:
                   # 建立 wp-config.php
                   cd /tmp/wordpress
                   wp config create \
-                    --dbname=${{ env.MYSQL_DATABASE }} \
-                    --dbuser=root \
-                    --dbpass=${{ env.MYSQL_ROOT_PASSWORD }} \
+                    --dbname=${{ env.WP_DB_NAME }} \
+                    --dbuser=${{ env.WP_DB_USER }} \
+                    --dbpass=${{ env.WP_DB_PASS }} \
                     --dbhost=127.0.0.1 \
                     --dbprefix=wp_ \
                     --extra-php <<PHP

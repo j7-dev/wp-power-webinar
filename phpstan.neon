@@ -2,7 +2,7 @@ parameters:
 	level: 9
 	paths:
 		- plugin.php
-		- inc/
+		- inc/src
 	ignoreErrors:
 		- '#Access to constant .* on an unknown class#'
 		- '#Constant .* not found#'

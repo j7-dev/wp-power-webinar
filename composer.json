@@ -19,7 +19,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "J7\\PowerWebinar\\": "inc/src/"
+            "J7\\PowerWebinar\\": "inc/src/",
+            "J7\\PowerWebinarTests\\": "inc/tests/"
         }
     },
     "config": {
