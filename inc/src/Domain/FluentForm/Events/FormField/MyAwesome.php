@@ -2,9 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace J7\PowerWebinar\Domains\FluentForm;
+namespace J7\PowerWebinar\Domain\FluentForm\Events\FormField;
 
-class MyAwesomeFFElement extends \FluentForm\App\Services\FormBuilder\BaseFieldManager {
+class MyAwesome extends \FluentForm\App\Services\FormBuilder\BaseFieldManager {
     
     private const KEY = 'webinarjam_radio_field';
     

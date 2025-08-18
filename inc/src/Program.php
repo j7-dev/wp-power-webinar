@@ -4,15 +4,15 @@ declare ( strict_types = 1 );
 
 namespace J7\PowerWebinar;
 
-use J7\PowerWebinar\Domains\FluentForm\Core\ExtendFormFieldHooks;
+use J7\PowerWebinar\Domain\FluentForm\Events\ExtendFormField;
 
-/** Class Bootstrap */
-final class Bootstrap {
+/** Class Program */
+final class Program {
     use \J7\WpUtils\Traits\SingletonTrait;
     
     /** Constructor */
     public function __construct() {
-        ExtendFormFieldHooks::instance();
+        ExtendFormField::instance();
         \add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_script' ] );
         \add_action( 'wp_enqueue_scripts', [ __CLASS__, 'frontend_enqueue_script' ] );
     }

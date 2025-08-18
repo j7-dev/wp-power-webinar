@@ -39,7 +39,7 @@ final class Plugin {
             [
                 'app_name'    => 'Power Webinar',
                 'github_repo' => 'https://github.com/j7-dev/wp-power-webinar',
-                'callback'    => [ Bootstrap::class, 'instance' ],
+                'callback'    => [ Program::class, 'instance' ],
                 'priority'    => 9,
                 'lc'          => 'ZmFsc2',
             ]
