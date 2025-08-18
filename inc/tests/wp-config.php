@@ -1,10 +1,14 @@
 <?php
 
+// 判斷是否由 github actions 執行
+$is_ci_workflow = getenv('CI') ?: false;
+
+$abs_path = $is_ci_workflow ? 'C:/Users/User/LocalSites/turbo/app/public/' : '/tmp/wordpress/';
 
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
 // 如果有用軟連結，最好寫絕對路徑
-define( 'ABSPATH', getenv( 'WP_ABSPATH' ) );
-define( 'PLUGIN_DIR', getenv( 'WP_PLUGIN_DIR' ) );
+define( 'ABSPATH', $abs_path );
+define( 'PLUGIN_DIR', "{$abs_path}wp-content/plugins/" );
 
 
 /*

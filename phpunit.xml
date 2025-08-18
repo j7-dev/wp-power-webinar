@@ -14,9 +14,5 @@
         <env name="WP_DB_USER" value="root"/>
         <env name="WP_DB_PASS" value="root"/>
         <env name="WP_DB_HOST" value="localhost:10083"/>
-        <env name="WP_ABSPATH"
-             value="..\..\..\"/>
-        <env name="WP_PLUGIN_DIR"
-             value="..\"/>
     </php>
 </phpunit>
