@@ -76,7 +76,7 @@ jobs:
                     --admin_email=admin@test.com \
                     --skip-email
 
-            - name: 克隆並安裝外掛
+            - name: 安裝外掛
               run: |
                   cd /tmp/wordpress/wp-content/plugins
                   
@@ -85,12 +85,8 @@ jobs:
                   
                   # 或者從其他 repo 克隆
                   # git clone ${{ env.REPO_URL }} ${{ env.PLUGIN_NAME }}
-                  
-                  # 返回 WordPress 根目錄啟用外掛
-                  cd /tmp/wordpress
-                  wp plugin activate ${{ env.PLUGIN_NAME }}
 
-            - name: 安裝依賴並執行測試
+            - name: 安裝依賴 composer install
               run: |
                   cd /tmp/wordpress/wp-content/plugins/${{ env.PLUGIN_NAME }}
                   
@@ -98,7 +94,16 @@ jobs:
                   if [ -f "composer.json" ]; then
                     composer install --prefer-dist --no-progress
                   fi
-                  
+
+            - name: 啟用外掛
+              run: |
+                  # 返回 WordPress 根目錄啟用外掛
+                  cd /tmp/wordpress
+                  wp plugin activate ${{ env.PLUGIN_NAME }}
+
+            - name: 執行測試
+              run: |
+                  cd /tmp/wordpress/wp-content/plugins/${{ env.PLUGIN_NAME }}
                   # 執行測試
                   if [ -f "composer.json" ] && grep -q '"test"' composer.json; then
                     composer test
