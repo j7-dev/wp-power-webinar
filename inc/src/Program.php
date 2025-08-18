@@ -8,52 +8,59 @@ use J7\PowerWebinar\Domain\FluentForm\Events\ExtendFormField;
 
 /** Class Program */
 final class Program {
-    use \J7\WpUtils\Traits\SingletonTrait;
-    
-    /** Constructor */
-    public function __construct() {
-        ExtendFormField::instance();
-        \add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_script' ] );
-        \add_action( 'wp_enqueue_scripts', [ __CLASS__, 'frontend_enqueue_script' ] );
-    }
-    
-    /**
-     * Admin Enqueue script
-     * You can load the script on demand
-     *
-     * @return void
-     */
-    public static function admin_enqueue_script(): void {
-        self::enqueue_script();
-    }
-    
-    /**
-     * Enqueue script
-     * You can load the script on demand
-     *
-     * @return void
-     */
-    public static function enqueue_script(): void {
-        
-        \wp_enqueue_script(
-            Plugin::$kebab, Plugin::$url . '/js/dist/index.js', [ 'jquery' ], Plugin::$version, [
-                              'in_footer' => true,
-                              'strategy'  => 'async',
-                          ]
-        );
-        
-        \wp_enqueue_style(
-            Plugin::$kebab, Plugin::$url . '/js/dist/assets/css/index.css', [], Plugin::$version
-        );
-    }
-    
-    /**
-     * Front-end Enqueue script
-     * You can load the script on demand
-     *
-     * @return void
-     */
-    public static function frontend_enqueue_script(): void {
-        self::enqueue_script();
-    }
+	use \J7\WpUtils\Traits\SingletonTrait;
+
+	/** Constructor */
+	public function __construct() {
+		ExtendFormField::instance();
+		\add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_script' ] );
+		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'frontend_enqueue_script' ] );
+	}
+
+	/**
+	 * Admin Enqueue script
+	 * You can load the script on demand
+	 *
+	 * @return void
+	 */
+	public static function admin_enqueue_script(): void {
+		self::enqueue_script();
+	}
+
+	/**
+	 * Enqueue script
+	 * You can load the script on demand
+	 *
+	 * @return void
+	 */
+	public static function enqueue_script(): void {
+
+		\wp_enqueue_script(
+			Plugin::$kebab,
+			Plugin::$url . '/js/dist/index.js',
+			[ 'jquery' ],
+			Plugin::$version,
+			[
+				'in_footer' => true,
+				'strategy'  => 'async',
+			]
+		);
+
+		\wp_enqueue_style(
+			Plugin::$kebab,
+			Plugin::$url . '/js/dist/assets/css/index.css',
+			[],
+			Plugin::$version
+		);
+	}
+
+	/**
+	 * Front-end Enqueue script
+	 * You can load the script on demand
+	 *
+	 * @return void
+	 */
+	public static function frontend_enqueue_script(): void {
+		self::enqueue_script();
+	}
 }

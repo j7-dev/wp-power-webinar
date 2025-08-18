@@ -54,6 +54,7 @@
         <exclude name="WordPress.WP.I18n.MissingTranslatorsComment"/>
         <exclude name="Squiz.Commenting.FileComment.Missing"/>
         <exclude name="WordPress.Security.EscapeOutput.ExceptionNotEscaped"/>
+        <exclude name="PHPCompatibility.Variables.ForbiddenThisUseContexts.OutsideObjectContext"/>
     </rule>
 
     <exclude-pattern>.idea/*</exclude-pattern>
@@ -62,7 +63,15 @@
     <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*/tests/*</exclude-pattern>
-    <config name="testVersion" value="8.1-"/>
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="indent" value="4"/>
+            <property name="exact" value="true"/>
+            <property name="tabIndent" value="true"/>
+        </properties>
+    </rule>
+
+    <config name="testVersion" value="8.0-"/>
     <rule ref="PHPCompatibility"/>
 
     <!-- Enforce PSR1 compatible namespaces. -->
@@ -117,14 +126,6 @@
     <!-- 允許單行 <?php. -->
     <rule ref="Squiz.PHP.EmbeddedPhp.ContentAfterOpen">
         <severity>0</severity>
-    </rule>
-
-    <rule ref="Generic.WhiteSpace.ScopeIndent">
-        <properties>
-            <property name="indent" value="4"/>
-            <property name="exact" value="true"/>
-            <property name="tabIndent" value="false"/>
-        </properties>
     </rule>
 
 </ruleset>
