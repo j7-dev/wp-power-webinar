@@ -46,7 +46,7 @@
         "wp-phpunit/wp-phpunit": "^6.0"
     },
     "scripts": {
-        "test": "vendor\\bin\\phpunit --colors=always --testdox",
+        "test": "vendor/bin/phpunit --colors=always --testdox",
         "lint": "phpcs"
     }
 }
