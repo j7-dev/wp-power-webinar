@@ -1,0 +1,125 @@
+name: WordPress Plugin 測試
+
+env:
+    PLUGIN_NAME: "power-webinar"
+    REPO_URL: "https://github.com/j7-dev/wp-power-webinar.git"
+    PHP_VERSION: "8.1"
+
+on:
+    push:
+        branches: [ master ]
+    pull_request:
+        branches: [ master ]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: 檢出程式碼
+              uses: actions/checkout@v4
+
+            - name: 設定 PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ env.PHP_VERSION }}
+                  extensions: sqlite3, mbstring, xml, zip, gd, curl
+                  tools: composer, wp-cli
+
+            - name: 下載並設定 WordPress with SQLite
+              run: |
+                  # 下載 WordPress
+                  curl -O https://wordpress.org/latest.tar.gz
+                  tar xzf latest.tar.gz
+                  
+                  # 下載 SQLite Database Integration 插件
+                  curl -L https://github.com/WordPress/sqlite-database-integration/archive/refs/heads/main.zip -o sqlite.zip
+                  unzip sqlite.zip
+                  
+                  # 安裝 SQLite 插件
+                  cp -r sqlite-database-integration-main/wp-content/mu-plugins wordpress/wp-content/
+                  cp -r sqlite-database-integration-main/wp-content/db.php wordpress/wp-content/
+                  
+                  # 建立基本的 wp-config.php
+                  cd wordpress
+                  cat > wp-config.php << 'EOF'
+                  <?php
+                  define( 'DB_NAME', 'wordpress' );
+                  define( 'DB_USER', 'root' );
+                  define( 'DB_PASSWORD', '' );
+                  define( 'DB_HOST', 'localhost' );
+                  define( 'DB_CHARSET', 'utf8' );
+                  define( 'DB_COLLATE', '' );
+                  
+                  define('AUTH_KEY',         '`g[;0u`:-8<8oQ{>KS{LTGDgOAR83DgY;EjwU!p2`/0FS}V2x0xW[b}3k56lWy}j');
+                  define('SECURE_AUTH_KEY',  ':a{$5PX2TbGb({%w/a+,1@m,P|,xW$J|.&iElO]pnS^( 14@~6a;m`o{p!?.|mX(');
+                  define('LOGGED_IN_KEY',    '?.*GR%zSI7nrjp#%S?5q+$Y!Q.|W&_/tC0JjKw`piP+-h87]M^S3 4F$irI`sY;h');
+                  define('NONCE_KEY',        'ivLS_vOy-_UH,~D5y%v(o7PJqRpIXr(FffE@(qcQtoM|hr*$WmrU]F8Kt][2^-}-');
+                  define('AUTH_SALT',        '%(i7)?T1V J}--)ZH-N+;TM#ee$P,y7pG;+i-emA-m5Uo7QpkrW*4ev F|TL$ y=');
+                  define('SECURE_AUTH_SALT', '[>zMpm27En.DD VO)5Y!HB2=DNV{ifA R5`}[5DX6tHoKuvUt2l)$Ml<^*U!-CeA');
+                  define('LOGGED_IN_SALT',   '#pD=j~A}y^GL6a}Z;znaXiW/Qg9;mvS^7_u8sXg&&hH793 8-|541lAOjT_/yu#Y');
+                  define('NONCE_SALT',       '=$+xwC-4h%tW0%z]/YS8]&]mb0#b`x`%nMTu0)9(vn ?J,1VBhuT]X1//)2>|xtn');
+                  
+                  $table_prefix = 'wp_';
+                  
+                  define( 'WP_DEBUG', true );
+                  define( 'WP_DEBUG_LOG', true );
+                  define( 'WP_DEBUG_DISPLAY', false );
+                  
+                  if ( ! defined( 'ABSPATH' ) ) {
+                      define( 'ABSPATH', __DIR__ . '/' );
+                  }
+                  
+                  require_once ABSPATH . 'wp-settings.php';
+                  EOF
+
+            - name: 初始化 WordPress
+              run: |
+                  cd wordpress
+                  # 使用 WP-CLI 安裝 WordPress
+                  wp core install \
+                    --url=http://localhost \
+                    --title="Test Site" \
+                    --admin_user=admin \
+                    --admin_password=admin \
+                    --admin_email=admin@test.com \
+                    --skip-email
+
+            - name: 克隆並安裝外掛
+              run: |
+                  cd wordpress/wp-content/plugins
+                  
+                  # 克隆你的外掛 (可以直接使用 checkout 的程式碼)
+                  # 如果外掛程式碼已經在 checkout 中，可以直接複製
+                  cp -r $GITHUB_WORKSPACE ./${{ env.PLUGIN_NAME }}
+                  
+                  # 或者從其他 repo 克隆
+                  # git clone ${{ env.REPO_URL }} ${{ env.PLUGIN_NAME }}
+                  
+                  # 返回 WordPress 根目錄啟用外掛
+                  cd ../..
+                  wp plugin activate ${{ env.PLUGIN_NAME }}
+
+            - name: 安裝依賴並執行測試
+              run: |
+                  cd wordpress/wp-content/plugins/${{ env.PLUGIN_NAME }}
+                  
+                  # 安裝 Composer 依賴（如果存在）
+                  if [ -f "composer.json" ]; then
+                    composer install --prefer-dist --no-progress
+                  fi
+                  
+                  # 執行測試
+                  if [ -f "composer.json" ] && grep -q '"test"' composer.json; then
+                    composer test
+                  else
+                    echo "沒有找到測試命令"
+                  fi
+
+            - name: 顯示錯誤日誌（如果測試失敗）
+              if: failure()
+              run: |
+                  if [ -f wordpress/wp-content/debug.log ]; then
+                    echo "=== WordPress Debug Log ==="
+                    tail -100 wordpress/wp-content/debug.log
+                  fi

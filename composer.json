@@ -39,9 +39,13 @@
         "phpstan/phpstan": "@stable",
         "php-stubs/woocommerce-stubs": "@stable",
         "php-stubs/wordpress-stubs": "@stable",
-        "phpstan/extension-installer": "@stable"
+        "phpstan/extension-installer": "@stable",
+        "phpunit/phpunit": "^9.0",
+        "yoast/phpunit-polyfills": "^4.0",
+        "wp-phpunit/wp-phpunit": "^6.0"
     },
     "scripts": {
+        "test": "vendor\\bin\\phpunit --colors=always --testdox",
         "lint": "phpcs"
     }
 }
