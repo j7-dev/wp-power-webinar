@@ -13,6 +13,5 @@
         <env name="WP_DB_NAME" value="test"/>
         <env name="WP_DB_USER" value="root"/>
         <env name="WP_DB_PASS" value="root"/>
-        <env name="WP_DB_HOST" value="localhost:10083"/>
     </php>
 </phpunit>
