@@ -26,7 +26,7 @@ jobs:
                     MYSQL_ROOT_PASSWORD: ${{ env.WP_DB_PASS }}
                     MYSQL_DATABASE: ${{ env.WP_DB_NAME }}
                 ports:
-                    - ${{env.WP_DB_PORT}}:3306
+                    - 10083:3306
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
         steps:
