@@ -4,6 +4,8 @@ env:
     PLUGIN_NAME: "power-webinar"
     REPO_URL: "https://github.com/j7-dev/wp-power-webinar.git"
     PHP_VERSION: "8.1"
+    MYSQL_DATABASE: wordpress_test
+    MYSQL_ROOT_PASSWORD: root
 
 on:
     push:
@@ -15,6 +17,16 @@ jobs:
     test:
         runs-on: ubuntu-latest
 
+        services:
+            mysql:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
+                    MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
+                ports:
+                    - 3306:3306
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
         steps:
             - name: 檢出程式碼
               uses: actions/checkout@v4
@@ -23,55 +35,34 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ env.PHP_VERSION }}
-                  extensions: sqlite3, mbstring, xml, zip, gd, curl
+                  extensions: mysqli, mbstring, xml, zip, gd, curl
                   tools: composer, wp-cli
 
-            - name: 下載並設定 WordPress with SQLite
+            - name: 等待 MySQL 準備就緒
+              run: |
+                  until mysqladmin ping -h 127.0.0.1 -P 3306 --silent; do
+                    echo '等待 MySQL 啟動...'
+                    sleep 2
+                  done
+
+            - name: 下載並設定 WordPress
               run: |
                   # 下載 WordPress
-                  curl -O https://wordpress.org/latest.tar.gz
-                  tar xzf latest.tar.gz
+                  wp core download --path=wordpress
                   
-                  # 下載 SQLite Database Integration 插件
-                  curl -L https://github.com/WordPress/sqlite-database-integration/archive/refs/heads/main.zip -o sqlite.zip
-                  unzip sqlite.zip
-                  
-                  # 安裝 SQLite 插件
-                  cp -r sqlite-database-integration-main/wp-content/mu-plugins wordpress/wp-content/
-                  cp -r sqlite-database-integration-main/wp-content/db.php wordpress/wp-content/
-                  
-                  # 建立基本的 wp-config.php
+                  # 建立 wp-config.php
                   cd wordpress
-                  cat > wp-config.php << 'EOF'
-                  <?php
-                  define( 'DB_NAME', 'wordpress' );
-                  define( 'DB_USER', 'root' );
-                  define( 'DB_PASSWORD', '' );
-                  define( 'DB_HOST', 'localhost' );
-                  define( 'DB_CHARSET', 'utf8' );
-                  define( 'DB_COLLATE', '' );
-                  
-                  define('AUTH_KEY',         '`g[;0u`:-8<8oQ{>KS{LTGDgOAR83DgY;EjwU!p2`/0FS}V2x0xW[b}3k56lWy}j');
-                  define('SECURE_AUTH_KEY',  ':a{$5PX2TbGb({%w/a+,1@m,P|,xW$J|.&iElO]pnS^( 14@~6a;m`o{p!?.|mX(');
-                  define('LOGGED_IN_KEY',    '?.*GR%zSI7nrjp#%S?5q+$Y!Q.|W&_/tC0JjKw`piP+-h87]M^S3 4F$irI`sY;h');
-                  define('NONCE_KEY',        'ivLS_vOy-_UH,~D5y%v(o7PJqRpIXr(FffE@(qcQtoM|hr*$WmrU]F8Kt][2^-}-');
-                  define('AUTH_SALT',        '%(i7)?T1V J}--)ZH-N+;TM#ee$P,y7pG;+i-emA-m5Uo7QpkrW*4ev F|TL$ y=');
-                  define('SECURE_AUTH_SALT', '[>zMpm27En.DD VO)5Y!HB2=DNV{ifA R5`}[5DX6tHoKuvUt2l)$Ml<^*U!-CeA');
-                  define('LOGGED_IN_SALT',   '#pD=j~A}y^GL6a}Z;znaXiW/Qg9;mvS^7_u8sXg&&hH793 8-|541lAOjT_/yu#Y');
-                  define('NONCE_SALT',       '=$+xwC-4h%tW0%z]/YS8]&]mb0#b`x`%nMTu0)9(vn ?J,1VBhuT]X1//)2>|xtn');
-                  
-                  $table_prefix = 'wp_';
-                  
+                  wp config create \
+                    --dbname=${{ env.MYSQL_DATABASE }} \
+                    --dbuser=root \
+                    --dbpass=${{ env.MYSQL_ROOT_PASSWORD }} \
+                    --dbhost=127.0.0.1 \
+                    --dbprefix=wp_ \
+                    --extra-php <<PHP
                   define( 'WP_DEBUG', true );
                   define( 'WP_DEBUG_LOG', true );
                   define( 'WP_DEBUG_DISPLAY', false );
-                  
-                  if ( ! defined( 'ABSPATH' ) ) {
-                      define( 'ABSPATH', __DIR__ . '/' );
-                  }
-                  
-                  require_once ABSPATH . 'wp-settings.php';
-                  EOF
+                  PHP
 
             - name: 初始化 WordPress
               run: |
