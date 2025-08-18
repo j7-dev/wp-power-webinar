@@ -47,11 +47,11 @@ jobs:
 
             - name: 下載並設定 WordPress
               run: |
-                  # 下載 WordPress
-                  wp core download --path=wordpress
+                  # 下載 WordPress 到上層目錄
+                  wp core download --path=/tmp/wordpress
                   
                   # 建立 wp-config.php
-                  cd wordpress
+                  cd /tmp/wordpress
                   wp config create \
                     --dbname=${{ env.MYSQL_DATABASE }} \
                     --dbuser=root \
@@ -66,7 +66,7 @@ jobs:
 
             - name: 初始化 WordPress
               run: |
-                  cd wordpress
+                  cd /tmp/wordpress
                   # 使用 WP-CLI 安裝 WordPress
                   wp core install \
                     --url=http://localhost \
@@ -78,22 +78,21 @@ jobs:
 
             - name: 克隆並安裝外掛
               run: |
-                  cd wordpress/wp-content/plugins
+                  cd /tmp/wordpress/wp-content/plugins
                   
-                  # 克隆你的外掛 (可以直接使用 checkout 的程式碼)
-                  # 如果外掛程式碼已經在 checkout 中，可以直接複製
+                  # 複製檢出的外掛程式碼到 WordPress plugins 目錄
                   cp -r $GITHUB_WORKSPACE ./${{ env.PLUGIN_NAME }}
                   
                   # 或者從其他 repo 克隆
                   # git clone ${{ env.REPO_URL }} ${{ env.PLUGIN_NAME }}
                   
                   # 返回 WordPress 根目錄啟用外掛
-                  cd ../..
+                  cd /tmp/wordpress
                   wp plugin activate ${{ env.PLUGIN_NAME }}
 
             - name: 安裝依賴並執行測試
               run: |
-                  cd wordpress/wp-content/plugins/${{ env.PLUGIN_NAME }}
+                  cd /tmp/wordpress/wp-content/plugins/${{ env.PLUGIN_NAME }}
                   
                   # 安裝 Composer 依賴（如果存在）
                   if [ -f "composer.json" ]; then
@@ -110,7 +109,7 @@ jobs:
             - name: 顯示錯誤日誌（如果測試失敗）
               if: failure()
               run: |
-                  if [ -f wordpress/wp-content/debug.log ]; then
+                  if [ -f /tmp/wordpress/wp-content/debug.log ]; then
                     echo "=== WordPress Debug Log ==="
-                    tail -100 wordpress/wp-content/debug.log
+                    tail -100 /tmp/wordpress/wp-content/debug.log
                   fi
