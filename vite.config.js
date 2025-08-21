@@ -1,47 +1,65 @@
-import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import alias from '@rollup/plugin-alias'
 import path from 'path'
-import optimizer from 'vite-plugin-optimizer'
+import {defineConfig} from 'vite'
 
 // import liveReload from 'vite-plugin-live-reload'
 
+import {v4wp} from '@kucrut/vite-for-wp'
+
 export default defineConfig({
-  build: {
-    emptyOutDir: true,
-    minify: true,
-    outDir: path.resolve(__dirname, 'js/dist'),
+    server: {
+        port: 5183,
+        cors: {
+            origin: '*',
+        },
+        fs: {
+            allow: ['./', '../../packages'],
+        },
+    },
+    build: {
+        emptyOutDir: true,
+        minify: true,
+        cssCodeSplit: false,
+        rollupOptions: {
+            output: {
+                assetFileNames: (assetInfo) => {
+                    return '[ext]/[name].[ext]';
+                },
+            },
+        },
+    },
+    plugins: [
+        alias(),
+        react(),
+        tsconfigPaths(),
 
-    // watch: {
-    //   include: ['js/src/**', 'inc/**'],
-    //   exclude: 'node_modules/**, .git/**, dist/**, .vscode/**',
+        // liveReload(__dirname + '/**/*.php'), // Optional, if you want to reload page on php changed
+
+        v4wp({
+            input: 'js/src/main.tsx', // Optional, defaults to 'src/main.js'.
+            outDir: 'js/dist', // Optional, defaults to 'dist'.
+        }),
+    ],
+
+    // build: {
+    // 	rollupOptions: {
+    // 		output: {
+    // 			// 修改入口檔案名稱
+    // 			entryFileNames: 'index.js',
+
+    // 			// 修改代碼分割後的檔案名稱
+    // 			chunkFileNames: '[name]-[hash].js',
+
+    // 			// 修改資源檔案名稱
+    // 			assetFileNames: '[name]-[hash].[ext]',
+    // 		},
+    // 	},
     // },
-
-    rollupOptions: {
-      input: 'js/src/main.ts', // Optional, defaults to 'src/main.js'.
-      output: {
-        assetFileNames: 'assets/[ext]/index.[ext]',
-        entryFileNames: 'index.js',
-      },
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'js/src'),
+        },
     },
-  },
-  plugins: [
-    alias(),
-    tsconfigPaths(),
-
-    // liveReload([
-    //   __dirname + '/**/*.php',
-    //   __dirname + '/js/dist/**/*',
-    //   __dirname + '/js/src/**/*.tsx',
-    // ]), // Optional, if you want to reload page on php changed
-
-    optimizer({
-      jquery: 'const $ = window.jQuery; export { $ as default }',
-    }),
-  ],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'js/src'),
-    },
-  },
 })
