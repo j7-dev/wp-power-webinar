@@ -6,10 +6,12 @@
 
 namespace J7\PowerWebinarTests;
 
+use J7\PowerWebinarTests\Shared\WC_UnitTestCase;
+
 
 
 /** Debug Test */
-class DebugTest extends \WP_UnitTestCase {
+class DebugTest extends WC_UnitTestCase {
    
     /**
      * @testdox 測試 do_action 函式是否存在

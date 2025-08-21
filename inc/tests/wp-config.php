@@ -6,6 +6,8 @@ $is_ci_workflow = getenv('CI') ?: false;
 $abs_path = $is_ci_workflow ? '/tmp/wordpress/' : 'C:/Users/User/LocalSites/turbo/app/public/' ;
 $db_host = $is_ci_workflow ? '127.0.0.1:3306' : 'localhost:10083';
 
+
+
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
 // 如果有用軟連結，最好寫絕對路徑
 define( 'ABSPATH', $abs_path );

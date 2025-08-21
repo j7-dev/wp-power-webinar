@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44a211c1afdd0d7c4a7790aff009f5ce",
+    "content-hash": "f161cd4b885fdeb442a4b7198b607fd9",
     "packages": [
         {
             "name": "j7-dev/tgm-plugin-activation-forked",
@@ -118,16 +118,16 @@
         },
         {
             "name": "j7-dev/wp-utils",
-            "version": "0.3.66",
+            "version": "0.3.67",
             "source": {
                 "type": "git",
                 "url": "https://github.com/j7-dev/wp-utils.git",
-                "reference": "c3e928a7a9ca29dd6005a7d9347dbb059a781616"
+                "reference": "3624ed51ba02b769655e145892008e9d2e211e5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/j7-dev/wp-utils/zipball/c3e928a7a9ca29dd6005a7d9347dbb059a781616",
-                "reference": "c3e928a7a9ca29dd6005a7d9347dbb059a781616",
+                "url": "https://api.github.com/repos/j7-dev/wp-utils/zipball/3624ed51ba02b769655e145892008e9d2e211e5f",
+                "reference": "3624ed51ba02b769655e145892008e9d2e211e5f",
                 "shasum": ""
             },
             "require": {
@@ -174,9 +174,9 @@
             ],
             "support": {
                 "issues": "https://github.com/j7-dev/wp-utils/issues",
-                "source": "https://github.com/j7-dev/wp-utils/tree/0.3.66"
+                "source": "https://github.com/j7-dev/wp-utils/tree/0.3.67"
             },
-            "time": "2025-08-12T07:52:46+00:00"
+            "time": "2025-08-21T11:32:52+00:00"
         },
         {
             "name": "yahnis-elsts/plugin-update-checker",
@@ -634,16 +634,16 @@
         },
         {
             "name": "php-stubs/woocommerce-stubs",
-            "version": "v10.1.0",
+            "version": "v10.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-stubs/woocommerce-stubs.git",
-                "reference": "f3c175017d45631548ace09bdc1f68ec4e6644a0"
+                "reference": "b8e010db32f6a5876f0c49fda467e15ea5d6f97f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-stubs/woocommerce-stubs/zipball/f3c175017d45631548ace09bdc1f68ec4e6644a0",
-                "reference": "f3c175017d45631548ace09bdc1f68ec4e6644a0",
+                "url": "https://api.github.com/repos/php-stubs/woocommerce-stubs/zipball/b8e010db32f6a5876f0c49fda467e15ea5d6f97f",
+                "reference": "b8e010db32f6a5876f0c49fda467e15ea5d6f97f",
                 "shasum": ""
             },
             "require": {
@@ -672,9 +672,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-stubs/woocommerce-stubs/issues",
-                "source": "https://github.com/php-stubs/woocommerce-stubs/tree/v10.1.0"
+                "source": "https://github.com/php-stubs/woocommerce-stubs/tree/v10.1.1"
             },
-            "time": "2025-08-12T16:44:45+00:00"
+            "time": "2025-08-20T15:58:51+00:00"
         },
         {
             "name": "php-stubs/wordpress-stubs",
@@ -1391,16 +1391,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.24",
+            "version": "9.6.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "ea49afa29aeea25ea7bf9de9fdd7cab163cc0701"
+                "reference": "049c011e01be805202d8eebedef49f769a8ec7b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ea49afa29aeea25ea7bf9de9fdd7cab163cc0701",
-                "reference": "ea49afa29aeea25ea7bf9de9fdd7cab163cc0701",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/049c011e01be805202d8eebedef49f769a8ec7b7",
+                "reference": "049c011e01be805202d8eebedef49f769a8ec7b7",
                 "shasum": ""
             },
             "require": {
@@ -1474,7 +1474,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.24"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.25"
             },
             "funding": [
                 {
@@ -1498,7 +1498,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-10T08:32:42+00:00"
+            "time": "2025-08-20T14:38:31+00:00"
         },
         {
             "name": "sebastian/cli-parser",
