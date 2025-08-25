@@ -13,14 +13,11 @@ use J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam\DTOs\PostWebinarL
 class PostWebinarListRequestDTOTest extends WC_UnitTestCase {
     
     /**
-     * @testdox 成功實例化
+     * @testdox 成功實例化，且 api_key 微 string
      */
     public function test_instance_success(): void {
         $dto = PostWebinarListRequestDTO::instance();
         $this->assertInstanceOf( PostWebinarListRequestDTO::class, $dto );
-        
-        $dto_array = $dto->to_array();
-        $this->assertArrayHasKey( 'api_key', $dto_array );
-        $this->assertIsString( $dto_array['api_key'] );
+        $this->assertIsString( $dto->api_key );
     }
 }

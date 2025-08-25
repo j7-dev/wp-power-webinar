@@ -19,32 +19,45 @@ declare ( strict_types = 1 );
 
 namespace J7\PowerWebinar;
 
-if( \class_exists( 'J7\PowerWebinar\Plugin' ) ) {
-    return;
+if ( \class_exists( 'J7\PowerWebinar\Plugin' ) ) {
+	return;
 }
 require_once __DIR__ . '/vendor/autoload.php';
 
-/**
- * Class Plugin
- */
+/** Class Plugin */
 final class Plugin {
-    use \J7\WpUtils\Traits\PluginTrait;
-    use \J7\WpUtils\Traits\SingletonTrait;
-    
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->init(
-            [
-                'app_name'    => 'Power Webinar',
-                'github_repo' => 'https://github.com/j7-dev/wp-power-webinar',
-                'callback'    => [ Program::class, 'instance' ],
-                'priority'    => 9,
-                'lc'          => 'ZmFsc2',
-            ]
-        );
-    }
+	use \J7\WpUtils\Traits\PluginTrait;
+	use \J7\WpUtils\Traits\SingletonTrait;
+
+	/** Constructor */
+	public function __construct() {
+		$this->init(
+			[
+				'app_name'    => 'Power Webinar',
+				'github_repo' => 'https://github.com/j7-dev/wp-power-webinar',
+				'callback'    => [ Program::class, 'instance' ],
+				'priority'    => 9,
+				'lc'          => 'ZmFsc2',
+			]
+		);
+	}
+
+	/**
+	 * @param string $message
+	 * @param string $level
+	 * @param mixed  $args
+	 * @param int    $trace_limit
+	 *
+	 * @return void
+	 */
+	public static function logger(
+		string $message = '',
+		string $level = 'info',
+		mixed $args = [],
+		int $trace_limit = 0
+	): void {
+		\J7\WpUtils\Classes\WC::logger( $message, $level, $args, 'power-webinar', $trace_limit );
+	}
 }
 
 Plugin::instance();

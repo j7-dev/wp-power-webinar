@@ -12,6 +12,7 @@ enum Plugin:string {
     case WOOCOMMERCE_SUBSCRIPTIONS = 'woocommerce-subscriptions/woocommerce-subscriptions.php';
     case POWERHOUSE = 'powerhouse/plugin.php';
     case POWER_PARTNER_SERVER = 'power-partner-server/plugin.php';
+    case POWER_WEBINAR = 'power-webinar/plugin.php';
     case WPCD = 'wp-cloud-deploy/wpcd.php';
     case WPCD_WOOCOMMERCE = 'wpcd-woocommerce/wpcd-woocommerce.php';
 }

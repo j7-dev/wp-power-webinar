@@ -4,10 +4,16 @@ declare( strict_types = 1 );
 
 namespace J7\PowerWebinar\Domain\FluentForm\Events\FormField;
 
+/**
+ * Fluent From 擴展欄位
+ *
+ * @ref https://developers.fluentforms.com/api/classes/base-field-manager/#further-read
+ */
 class MyAwesome extends \FluentForm\App\Services\FormBuilder\BaseFieldManager {
 
 	private const KEY = 'webinarjam_radio_field';
 
+	/** Constructor */
 	public function __construct() {
 		parent::__construct(
 			self::KEY,
@@ -27,7 +33,7 @@ class MyAwesome extends \FluentForm\App\Services\FormBuilder\BaseFieldManager {
 	 * @return array<string, mixed>
 	 */
 	public function getComponent(): array {
-		$defaultGlobalMessages = \FluentForm\App\Helpers\Helper::getAllGlobalDefaultMessages();
+		$default_global_messages = \FluentForm\App\Helpers\Helper::getAllGlobalDefaultMessages();
 		return [
 			'index'          => 15, // The priority of your element
 			'element'        => $this->key, // this is the unique identifier.
@@ -48,14 +54,14 @@ class MyAwesome extends \FluentForm\App\Services\FormBuilder\BaseFieldManager {
 				'randomize_options'     => 'no',
 				'advanced_options'      => [
 					[
-						'label'      => '2025/01/01 20:00-21:00 直播',
-						'value'      => '2025/01/01 20:00-21:00 直播',
+						'label'      => 'Yes',
+						'value'      => 'yes',
 						'calc_value' => '',
 						'image'      => '',
 					],
 					[
-						'label'      => '2025/01/07 15:00-16:00 直播',
-						'value'      => '2025/01/07 15:00-16:00 直播',
+						'label'      => 'No',
+						'value'      => 'no',
 						'calc_value' => '',
 						'image'      => '',
 					],
@@ -66,8 +72,8 @@ class MyAwesome extends \FluentForm\App\Services\FormBuilder\BaseFieldManager {
 				'validation_rules'      => [
 					'required' => [
 						'value'          => false,
-						'message'        => $defaultGlobalMessages['required'],
-						'global_message' => $defaultGlobalMessages['required'],
+						'message'        => $default_global_messages['required'],
+						'global_message' => $default_global_messages['required'],
 						'global'         => true,
 					],
 				],

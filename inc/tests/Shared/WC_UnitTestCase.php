@@ -15,7 +15,8 @@ abstract class WC_UnitTestCase extends \WP_UnitTestCase {
     
     /** @var Plugin[] 每個測試都要載入的外掛 */
     protected array $required_plugins = [
-        Plugin::WOOCOMMERCE
+        Plugin::WOOCOMMERCE,
+        Plugin::POWER_WEBINAR
     ];
     /** @var \ReflectionClass 反射類別 */
     protected \ReflectionClass $reflection;

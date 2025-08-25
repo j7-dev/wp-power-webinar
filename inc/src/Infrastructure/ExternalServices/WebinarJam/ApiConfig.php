@@ -4,6 +4,11 @@ namespace J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam;
 
 use J7\WpUtils\Traits\SingletonTrait;
 
+/**
+ * Class ApiConfig
+ *
+ * Configuration for WebinarJam API
+ */
 final class ApiConfig {
 	use SingletonTrait;
 

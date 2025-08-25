@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f161cd4b885fdeb442a4b7198b607fd9",
+    "content-hash": "9fc15a3f993ae3ad0516153c708a5839",
     "packages": [
         {
             "name": "j7-dev/tgm-plugin-activation-forked",
@@ -118,16 +118,16 @@
         },
         {
             "name": "j7-dev/wp-utils",
-            "version": "0.3.67",
+            "version": "0.3.68",
             "source": {
                 "type": "git",
                 "url": "https://github.com/j7-dev/wp-utils.git",
-                "reference": "3624ed51ba02b769655e145892008e9d2e211e5f"
+                "reference": "86f8003cd86e8b05495f03534ba172d8badfd897"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/j7-dev/wp-utils/zipball/3624ed51ba02b769655e145892008e9d2e211e5f",
-                "reference": "3624ed51ba02b769655e145892008e9d2e211e5f",
+                "url": "https://api.github.com/repos/j7-dev/wp-utils/zipball/86f8003cd86e8b05495f03534ba172d8badfd897",
+                "reference": "86f8003cd86e8b05495f03534ba172d8badfd897",
                 "shasum": ""
             },
             "require": {
@@ -137,11 +137,11 @@
             },
             "require-dev": {
                 "dealerdirect/phpcodesniffer-composer-installer": "@stable",
-                "php-stubs/woocommerce-stubs": "^9.0",
-                "php-stubs/wordpress-stubs": "^6.5",
+                "php-stubs/woocommerce-stubs": "@stable",
+                "php-stubs/wordpress-stubs": "@stable",
                 "phpcompatibility/php-compatibility": "@stable",
-                "phpstan/extension-installer": "^1.4",
-                "phpstan/phpstan": "^1.11",
+                "phpstan/extension-installer": "@stable",
+                "phpstan/phpstan": "@stable",
                 "squizlabs/php_codesniffer": "@stable",
                 "wp-coding-standards/wpcs": "@stable"
             },
@@ -174,9 +174,9 @@
             ],
             "support": {
                 "issues": "https://github.com/j7-dev/wp-utils/issues",
-                "source": "https://github.com/j7-dev/wp-utils/tree/0.3.67"
+                "source": "https://github.com/j7-dev/wp-utils/tree/0.3.68"
             },
-            "time": "2025-08-21T11:32:52+00:00"
+            "time": "2025-08-25T04:28:30+00:00"
         },
         {
             "name": "yahnis-elsts/plugin-update-checker",

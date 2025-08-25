@@ -7,26 +7,39 @@ use J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam\DTOs\PostWebinarL
 use J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam\DTOs\PostWebinarListResponseDTO;
 use J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam\DTOs\PostRegisterRequestDTO;
 use J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam\DTOs\PostRegisterResponseDTO;
+use J7\PowerWebinar\Domain\Webinar\Contracts\IApiClient;
+use J7\WpUtils\Classes\DTO;
+use J7\PowerWebinar\Plugin;
 
 /**
  * WebinarJam API 客戶端
- *
- * @package J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam
+ * 情求參數 DTO，進到方法會被 Mapper 為 RequestDTO
  */
-final class ApiClient {
-	// 使用 SingletonTrait 單例模式
+final class ApiClient implements IApiClient {
 	use SingletonTrait;
 
 	/**
 	 * 取得 Webinar 列表
 	 *
-	 * @param PostWebinarListRequestDTO $request_dto 請求 DTO
-	 * @return PostWebinarListResponseDTO 回傳 Webinar 列表 DTO
+	 * @param DTO $params 請求 DTO
+	 * @return array 回傳 Webinar 列表 DTO
 	 * @throws \Exception 請求失敗時拋出例外
 	 */
-	public function get_webinars( PostWebinarListRequestDTO $request_dto ): PostWebinarListResponseDTO {
-		$response = $this->requester( 'webinars', $request_dto->to_array(), 'POST' );
-		return PostWebinarListResponseDTO::from( $response);
+	public function get_webinars( DTO $params ): array {
+		try {
+			$request_dto = $params->to_dto(PostWebinarListRequestDTO::class);
+			$response    = $this->requester( 'webinars', $request_dto->to_array(), 'POST' );
+			return PostWebinarListResponseDTO::from( $response)->webinars;
+		} catch (\Exception $e) {
+			Plugin::logger(
+				$e->getMessage(),
+				'error',
+				[
+					'params' => $params->to_array(),
+				]
+				);
+			return [];
+		}
 	}
 
 	/**
@@ -35,10 +48,10 @@ final class ApiClient {
 	 * @param string               $endpoint API 路徑
 	 * @param array<string, mixed> $params 請求參數
 	 * @param string               $method HTTP 方法 (預設為 GET)
-	 * @return object 回傳 API 回應物件
+	 * @return array 回傳 API 回應物件
 	 * @throws \Exception 請求失敗時拋出例外
 	 */
-	private function requester( string $endpoint, array $params = [], string $method = 'GET' ): object {
+	private function requester( string $endpoint, array $params = [], string $method = 'GET' ): array {
 		$config = ApiConfig::instance();
 		$url    = "{$config->api_url}/{$endpoint}";
 		$body   = $params;
@@ -67,12 +80,13 @@ final class ApiClient {
 	/**
 	 * 報名 Webinar
 	 *
-	 * @param PostRegisterRequestDTO $request_dto 報名請求 DTO
+	 * @param DTO $params 報名請求 DTO
 	 * @return PostRegisterResponseDTO 報名回應 DTO
 	 * @throws \Exception 請求失敗時拋出例外
 	 */
-	public function register_webinar( PostRegisterRequestDTO $request_dto ): PostRegisterResponseDTO {
-		$response = $this->requester( 'register', $request_dto->to_array(), 'POST' );
+	public function register_webinar( DTO $params ): PostRegisterResponseDTO {
+		$request_dto = $params->to_dto(PostRegisterRequestDTO::class);
+		$response    = $this->requester( 'register', $request_dto->to_array(), 'POST' );
 		return PostRegisterResponseDTO::from( $response );
 	}
 }
