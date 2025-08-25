@@ -19,12 +19,14 @@ class WebinarDTO extends DTO {
 	protected array|string $require_properties = 'ALL';
 
 	/**
-	 * @return void
-	 * @throws \Exception 缺少參數
+	 * 轉換為選項格式
+	 *
+	 * @return array{value: string, label: string}
 	 */
-	protected function validate(): void {
-		parent::validate();
-		// schedule 必須是 ScheduleEnum::value 的陣列
-		array_map( [ ScheduleEnum::class, 'from' ], $this->schedules);
+	public function to_option(): array {
+		return [
+			'value' => $this->webinar_id,
+			'label' => $this->name,
+		];
 	}
 }

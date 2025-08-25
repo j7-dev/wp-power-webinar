@@ -28,7 +28,7 @@ class PostWebinarListResponseDTO extends DTO {
 		return new static(
 			[
 				'status'   => $response['status'] ?? '',
-				'webinars' => array_map( [ __CLASS__, 'parse' ], $response['webinars'] ?? [] ),
+				'webinars' => array_map( [ WebinarDTO::class, 'parse' ], $response['webinars'] ?? [] ),
 			]
 			);
 	}

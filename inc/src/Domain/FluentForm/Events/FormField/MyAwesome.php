@@ -4,6 +4,11 @@ declare( strict_types = 1 );
 
 namespace J7\PowerWebinar\Domain\FluentForm\Events\FormField;
 
+use J7\PowerWebinar\Application\Services\WebinarService;
+use J7\PowerWebinar\Domain\Webinar\Contracts\IWebinarService;
+use J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam\ApiClient;
+use J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam\DTOs\PostWebinarListRequestDTO;
+
 /**
  * Fluent From 擴展欄位
  *
@@ -13,6 +18,9 @@ class MyAwesome extends \FluentForm\App\Services\FormBuilder\BaseFieldManager {
 
 	private const KEY = 'webinarjam_radio_field';
 
+	/** @var IWebinarService Webinar 服務*/
+	private IWebinarService $service;
+
 	/** Constructor */
 	public function __construct() {
 		parent::__construct(
@@ -21,6 +29,9 @@ class MyAwesome extends \FluentForm\App\Services\FormBuilder\BaseFieldManager {
 			[ 'webinarjam' ],
 			'general' // where to push general/advanced
 		);
+
+		// 注入 ApiClient，未來可以擴充不同的 Webinar Provider
+		$this->service = new WebinarService(ApiClient::instance());
 
 		\add_filter( 'fluentform/response_render_' . $this->key, [ $this, 'renderResponse' ], 10, 4 );
 		\add_filter( 'fluentform/validate_input_item_' . $this->key, [ $this, 'validateInput' ], 10, 5 );
@@ -34,6 +45,7 @@ class MyAwesome extends \FluentForm\App\Services\FormBuilder\BaseFieldManager {
 	 */
 	public function getComponent(): array {
 		$default_global_messages = \FluentForm\App\Helpers\Helper::getAllGlobalDefaultMessages();
+		$webinars                = $this->service->get_webinars( new PostWebinarListRequestDTO());
 		return [
 			'index'          => 15, // The priority of your element
 			'element'        => $this->key, // this is the unique identifier.
@@ -52,20 +64,7 @@ class MyAwesome extends \FluentForm\App\Services\FormBuilder\BaseFieldManager {
 				'display_type'          => '',
 				'help_message'          => '',
 				'randomize_options'     => 'no',
-				'advanced_options'      => [
-					[
-						'label'      => 'Yes',
-						'value'      => 'yes',
-						'calc_value' => '',
-						'image'      => '',
-					],
-					[
-						'label'      => 'No',
-						'value'      => 'no',
-						'calc_value' => '',
-						'image'      => '',
-					],
-				],
+				'advanced_options'      => array_map( static fn( $w ) => $w->to_option(), $webinars),
 				'calc_value_status'     => false,
 				'enable_image_input'    => false,
 				'values_visible'        => false,

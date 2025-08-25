@@ -29,6 +29,9 @@ final class Plugin {
 	use \J7\WpUtils\Traits\PluginTrait;
 	use \J7\WpUtils\Traits\SingletonTrait;
 
+	/** @var array Reflection 反射快取 */
+	public array $reflection_containers = [];
+
 	/** Constructor */
 	public function __construct() {
 		$this->init(

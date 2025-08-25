@@ -3,7 +3,8 @@
 namespace J7\PowerWebinar\Application\Services;
 
 use J7\PowerWebinar\Domain\Webinar\Contracts\IWebinarService;
-use J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam\ApiClient;
+use J7\PowerWebinar\Shared\Cache\Attributes\Transient;
+use J7\PowerWebinar\Shared\Cache\CacheBase;
 use J7\WpUtils\Classes\DTO;
 use J7\PowerWebinar\Domain\Webinar\Contracts\IApiClient;
 
@@ -20,12 +21,13 @@ use J7\PowerWebinar\Domain\Webinar\Contracts\IApiClient;
  */
 final class WebinarService implements IWebinarService {
 
-	/** @var IApiClient ApiClient */
-	private IApiClient $api_client;
 
-	/** Constructor */
-	public function __construct() {
-		$this->api_client = ApiClient::instance();
+	/**
+	 * Constructor
+	 *
+	 * @param IApiClient $api_client 注入 Webinar Provider 的 ApiClient
+	 */
+	public function __construct( private readonly IApiClient $api_client ) {
 	}
 
 	/**
@@ -35,8 +37,16 @@ final class WebinarService implements IWebinarService {
 	 * @return array 回傳 Webinar 列表
 	 * @throws \Exception 請求失敗時拋出例外
 	 */
+	#[Transient(HOUR_IN_SECONDS)]
 	public function get_webinars( DTO $params ): array {
-		return $this->api_client->get_webinars($params);
+		$cache       = new CacheBase( __METHOD__, $params->to_unique_key() );
+		$cached_data = $cache->get();
+		if ($cached_data) {
+			return $cached_data;
+		}
+		$webinars = $this->api_client->get_webinars($params);
+		$cache->set( array_map( static fn( $w ) => $w->to_array(), $webinars) );
+		return $webinars;
 	}
 
 	/**

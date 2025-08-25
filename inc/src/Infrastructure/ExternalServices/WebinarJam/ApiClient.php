@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam;
 
 use J7\WpUtils\Traits\SingletonTrait;
@@ -10,6 +12,8 @@ use J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam\DTOs\PostRegister
 use J7\PowerWebinar\Domain\Webinar\Contracts\IApiClient;
 use J7\WpUtils\Classes\DTO;
 use J7\PowerWebinar\Plugin;
+use J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam\Shared\Http;
+use J7\PowerWebinar\Shared\Http\Attributes\Route;
 
 /**
  * WebinarJam API 客戶端
@@ -25,10 +29,12 @@ final class ApiClient implements IApiClient {
 	 * @return array 回傳 Webinar 列表 DTO
 	 * @throws \Exception 請求失敗時拋出例外
 	 */
+	#[Route('POST', 'webinars')]
 	public function get_webinars( DTO $params ): array {
 		try {
+			/** @var PostWebinarListRequestDTO $request_dto */
 			$request_dto = $params->to_dto(PostWebinarListRequestDTO::class);
-			$response    = $this->requester( 'webinars', $request_dto->to_array(), 'POST' );
+			$response    = ( new Http(__METHOD__, $request_dto->to_array() ) )->process();
 			return PostWebinarListResponseDTO::from( $response)->webinars;
 		} catch (\Exception $e) {
 			Plugin::logger(
@@ -43,50 +49,16 @@ final class ApiClient implements IApiClient {
 	}
 
 	/**
-	 * 發送 API 請求
-	 *
-	 * @param string               $endpoint API 路徑
-	 * @param array<string, mixed> $params 請求參數
-	 * @param string               $method HTTP 方法 (預設為 GET)
-	 * @return array 回傳 API 回應物件
-	 * @throws \Exception 請求失敗時拋出例外
-	 */
-	private function requester( string $endpoint, array $params = [], string $method = 'GET' ): array {
-		$config = ApiConfig::instance();
-		$url    = "{$config->api_url}/{$endpoint}";
-		$body   = $params;
-		if ( 'GET' === $method ) {
-			$url  = \add_query_arg( $params, $url );
-			$body = null;
-		}
-		$result = \wp_remote_request(
-			$url,
-			[
-				'method'   => $method,
-				'timeout'  => 30,
-				'blocking' => true,
-				'body'     => $body,
-					// 'headers'  => $headers,
-			]
-		);
-
-		if ( \is_wp_error( $result ) ) {
-			throw new \Exception( $result->get_error_message() );
-		}
-		$body = \wp_remote_retrieve_body( $result );
-		return \json_decode( $body, true, 512, JSON_THROW_ON_ERROR );
-	}
-
-	/**
 	 * 報名 Webinar
 	 *
 	 * @param DTO $params 報名請求 DTO
 	 * @return PostRegisterResponseDTO 報名回應 DTO
 	 * @throws \Exception 請求失敗時拋出例外
 	 */
+	#[Route('POST', 'register')]
 	public function register_webinar( DTO $params ): PostRegisterResponseDTO {
 		$request_dto = $params->to_dto(PostRegisterRequestDTO::class);
-		$response    = $this->requester( 'register', $request_dto->to_array(), 'POST' );
+		$response    = ( new Http(__METHOD__, $request_dto->to_array()) )->process();
 		return PostRegisterResponseDTO::from( $response );
 	}
 }

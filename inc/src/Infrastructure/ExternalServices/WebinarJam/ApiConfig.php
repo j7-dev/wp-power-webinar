@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace J7\PowerWebinar\Infrastructure\ExternalServices\WebinarJam;
 
 use J7\WpUtils\Traits\SingletonTrait;
@@ -16,7 +18,7 @@ final class ApiConfig {
 	public readonly string $api_url;
 
 	/** @var string API key for authentication */
-	public readonly string $api_key;
+	public string $api_key;
 
 	/** Constructor */
 	public function __construct() {

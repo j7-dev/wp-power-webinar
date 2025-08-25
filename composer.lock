@@ -118,16 +118,16 @@
         },
         {
             "name": "j7-dev/wp-utils",
-            "version": "0.3.68",
+            "version": "0.3.70",
             "source": {
                 "type": "git",
                 "url": "https://github.com/j7-dev/wp-utils.git",
-                "reference": "86f8003cd86e8b05495f03534ba172d8badfd897"
+                "reference": "15f93e8baf3edf36cdb0b45c6f333f82c25b2906"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/j7-dev/wp-utils/zipball/86f8003cd86e8b05495f03534ba172d8badfd897",
-                "reference": "86f8003cd86e8b05495f03534ba172d8badfd897",
+                "url": "https://api.github.com/repos/j7-dev/wp-utils/zipball/15f93e8baf3edf36cdb0b45c6f333f82c25b2906",
+                "reference": "15f93e8baf3edf36cdb0b45c6f333f82c25b2906",
                 "shasum": ""
             },
             "require": {
@@ -174,9 +174,9 @@
             ],
             "support": {
                 "issues": "https://github.com/j7-dev/wp-utils/issues",
-                "source": "https://github.com/j7-dev/wp-utils/tree/0.3.68"
+                "source": "https://github.com/j7-dev/wp-utils/tree/0.3.70"
             },
-            "time": "2025-08-25T04:28:30+00:00"
+            "time": "2025-08-25T11:02:12+00:00"
         },
         {
             "name": "yahnis-elsts/plugin-update-checker",
